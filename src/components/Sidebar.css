@@ -1,0 +1,52 @@
+.sidebar{
+    width:260px;
+    height:100vh;
+    background:#1E293B;
+    position:fixed;
+    left:0;
+    top:0;
+    color:#fff;
+    padding:20px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.logo h2{
+    font-size:24px;
+    font-weight:bold;
+}
+
+.menu{
+    list-style:none;
+    padding:0;
+}
+
+.menu li{
+    margin-bottom:15px;
+}
+
+.menu-link{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:12px 15px;
+    color:#fff;
+    text-decoration:none;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.menu-link:hover{
+    background:#2563EB;
+}
+
+.menu-link.active{
+    background:#2563EB;
+}
+
+.icon{
+    font-size:20px;
+}
