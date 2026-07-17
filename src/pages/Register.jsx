@@ -39,7 +39,7 @@ function Register() {
 
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/auth/register",
+        "https://coursetracker-bd.onrender.com/api/auth/register",
         {
           name: user.name,
           email: user.email,

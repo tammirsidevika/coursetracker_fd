@@ -14,7 +14,7 @@ function Courses() {
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/api/courses");
+      const res = await axios.get("https://coursetracker-bd.onrender.com/api/courses");
       setCourses(res.data);
     } catch (error) {
       console.log(error);

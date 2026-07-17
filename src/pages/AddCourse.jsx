@@ -26,7 +26,7 @@ function AddCourse() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3001/api/courses/add",
+        "https://coursetracker-bd.onrender.com/api/courses/add",
         course
       );
 
