@@ -14,7 +14,9 @@ function Courses() {
 
   const fetchCourses = async () => {
     try {
-      const res = await axios.get("https://coursetracker-bd.onrender.com/api/courses");
+      const res = await axios.get(
+        "https://coursetracker-bd.onrender.com/api/courses"
+      );
       setCourses(res.data);
     } catch (error) {
       console.log(error);
@@ -22,9 +24,7 @@ function Courses() {
   };
 
   const filteredCourses = courses.filter((course) =>
-    course.courseName
-      ?.toLowerCase()
-      .includes(searchTerm.toLowerCase())
+    course.courseName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -38,7 +38,10 @@ function Courses() {
         setSearchTerm={setSearchTerm}
       />
 
-      <CourseTable courses={filteredCourses} />
+      <CourseTable
+        courses={filteredCourses}
+        fetchCourses={fetchCourses}
+      />
     </Layout>
   );
 }
