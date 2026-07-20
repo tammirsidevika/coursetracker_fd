@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./CourseTable.css";
 
-function CourseTable({ courses = [] }) {
+function CourseTable({ courses = [], fetchCourses }) {
   const navigate = useNavigate();
 
   const deleteCourse = async (id) => {
@@ -14,16 +14,15 @@ function CourseTable({ courses = [] }) {
     if (!confirmDelete) return;
 
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `https://coursetracker-bd.onrender.com/api/courses/${id}`
       );
 
-      if (response.status === 200) {
-        alert("Course Deleted Successfully");
+      alert("Course Deleted Successfully");
 
-        // Refresh the page
-        window.location.reload();
-      }
+      // Reload the course list
+      fetchCourses();
+
     } catch (error) {
       console.error("Delete Error:", error);
       alert(error.response?.data?.message || "Failed to delete course");
