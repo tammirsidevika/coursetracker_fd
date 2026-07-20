@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function EditCourse() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [course, setCourse] = useState({
     courseName: "",
     category: "",
@@ -13,6 +18,37 @@ function EditCourse() {
     description: "",
   });
 
+  useEffect(() => {
+    fetchCourse();
+  }, []);
+
+  const fetchCourse = async () => {
+    try {
+      const res = await axios.get(
+        `https://coursetracker-bd.onrender.com/api/courses/${id}`
+      );
+
+      setCourse({
+        courseName: res.data.courseName || "",
+        category: res.data.category || "",
+        instructor: res.data.instructor || "",
+        duration: res.data.duration || "",
+        status: res.data.status || "",
+        progress: res.data.progress || "",
+        startDate: res.data.startDate
+          ? res.data.startDate.substring(0, 10)
+          : "",
+        endDate: res.data.endDate
+          ? res.data.endDate.substring(0, 10)
+          : "",
+        description: res.data.description || "",
+      });
+    } catch (error) {
+      console.log(error);
+      alert("Failed to load course");
+    }
+  };
+
   const handleChange = (e) => {
     setCourse({
       ...course,
@@ -20,26 +56,32 @@ function EditCourse() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(course);
+    try {
+      await axios.put(
+        `https://coursetracker-bd.onrender.com/api/courses/${id}`,
+        course
+      );
 
-    alert("Course Updated Successfully!");
+      alert("Course Updated Successfully!");
+      navigate("/courses");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update course");
+    }
   };
 
   return (
     <div className="container mt-5">
       <div className="card shadow">
-
         <div className="card-header bg-primary text-white">
           <h3>Edit Course</h3>
         </div>
 
         <div className="card-body">
-
           <form onSubmit={handleSubmit}>
-
             <div className="row">
 
               <div className="col-md-6 mb-3">
@@ -50,7 +92,7 @@ function EditCourse() {
                   name="courseName"
                   value={course.courseName}
                   onChange={handleChange}
-                  placeholder="Enter Course Name"
+                  required
                 />
               </div>
 
@@ -62,7 +104,7 @@ function EditCourse() {
                   name="category"
                   value={course.category}
                   onChange={handleChange}
-                  placeholder="Enter Category"
+                  required
                 />
               </div>
 
@@ -74,7 +116,7 @@ function EditCourse() {
                   name="instructor"
                   value={course.instructor}
                   onChange={handleChange}
-                  placeholder="Enter Instructor Name"
+                  required
                 />
               </div>
 
@@ -86,25 +128,24 @@ function EditCourse() {
                   name="duration"
                   value={course.duration}
                   onChange={handleChange}
-                  placeholder="Enter Duration"
+                  required
                 />
               </div>
 
               <div className="col-md-6 mb-3">
                 <label className="form-label">Status</label>
-
                 <select
                   className="form-select"
                   name="status"
                   value={course.status}
                   onChange={handleChange}
+                  required
                 >
                   <option value="">Select Status</option>
                   <option value="Not Started">Not Started</option>
                   <option value="In Progress">In Progress</option>
                   <option value="Completed">Completed</option>
                 </select>
-
               </div>
 
               <div className="col-md-6 mb-3">
@@ -115,7 +156,7 @@ function EditCourse() {
                   name="progress"
                   value={course.progress}
                   onChange={handleChange}
-                  placeholder="Enter Progress"
+                  required
                 />
               </div>
 
@@ -143,15 +184,13 @@ function EditCourse() {
 
               <div className="col-12 mb-3">
                 <label className="form-label">Description</label>
-
                 <textarea
                   className="form-control"
                   rows="4"
                   name="description"
                   value={course.description}
                   onChange={handleChange}
-                  placeholder="Enter Course Description"
-                ></textarea>
+                />
               </div>
 
             </div>
@@ -159,11 +198,8 @@ function EditCourse() {
             <button type="submit" className="btn btn-primary w-100">
               Update Course
             </button>
-
           </form>
-
         </div>
-
       </div>
     </div>
   );
