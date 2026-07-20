@@ -7,16 +7,26 @@ function CourseTable({ courses = [] }) {
   const navigate = useNavigate();
 
   const deleteCourse = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this course?"
+    );
+
+    if (!confirmDelete) return;
+
     try {
-      await axios.delete(
+      const response = await axios.delete(
         `https://coursetracker-bd.onrender.com/api/courses/${id}`
       );
 
-      alert("Course Deleted Successfully");
-      window.location.reload();
+      if (response.status === 200) {
+        alert("Course Deleted Successfully");
+
+        // Refresh the page
+        window.location.reload();
+      }
     } catch (error) {
-      console.log(error);
-      alert("Delete Failed");
+      console.error("Delete Error:", error);
+      alert(error.response?.data?.message || "Failed to delete course");
     }
   };
 
@@ -54,6 +64,7 @@ function CourseTable({ courses = [] }) {
 
                 <td>
                   <button
+                    type="button"
                     className="edit-btn"
                     onClick={() => navigate(`/edit-course/${course._id}`)}
                   >
@@ -61,6 +72,7 @@ function CourseTable({ courses = [] }) {
                   </button>
 
                   <button
+                    type="button"
                     className="delete-btn"
                     onClick={() => deleteCourse(course._id)}
                   >
